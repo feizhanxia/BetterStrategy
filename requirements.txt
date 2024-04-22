@@ -11,3 +11,4 @@ stable-baselines3
 jupyter
 rl_zoo3
 sbx-rl
+tensorboard
