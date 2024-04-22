@@ -16,8 +16,8 @@ class PredatorPreyEnv(gym.Env):
                 visibility_radius=2.0, 
                 critical_distance=0.5, 
                 num_preys=100, 
-                predator_speed = 0.1,
-                prey_max_speed = 0.1,
+                predator_speed=0.1,
+                prey_max_speed=0.1,
                 energy_per_step=-0.1, 
                 energy_per_capture=1.0, 
                 home_reward_ratio=0.5):
