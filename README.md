@@ -27,6 +27,12 @@ BetterStrategy/
 │   ├── __init__.py            # 使utils目录可作为模块
 │   └── kinematics.py          # 包含运动学模型和相关计算
 │
-├── main.py                    # 项目的主执行文件，用于启动和运行模拟
+├── main.py                    # 项目的主执行文件,用于启动和运行模拟
 ├── requirements.txt           # 项目依赖文件
 └── README.md                  # 项目说明文件
+
+First, `pip install --upgrade pip setuptools wheel`
+
+Second, `pip install -r requirements.txt`
+
+Then, `python main.py`
