@@ -2,7 +2,7 @@
 
  毕业论文的, 仿真实验/计算分析的, 代码/文档
 
-``
+```
 BetterStrategy/
 │
 ├── output/                    # 存储输出和训练结果
@@ -30,6 +30,7 @@ BetterStrategy/
 ├── main.py                    # 项目的主执行文件,用于启动和运行模拟
 ├── requirements.txt           # 项目依赖文件
 └── README.md                  # 项目说明文件
+```
 
 First, `pip install --upgrade pip setuptools wheel`
 
