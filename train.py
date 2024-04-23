@@ -23,13 +23,16 @@ if __name__ == '__main__':
     # 创建并配置PPO算法
     model = PPO(train_config['policy'], vec_env, verbose=1, tensorboard_log="./output/ppo_tensorboard/", **train_config["model"])
 
-    # Checkpoint每10000步保存一次
-    checkpoint_callback = CheckpointCallback(save_freq=train_config['save_freq'], save_path='./output/checkpoints/',
-                                            name_prefix=name_prefix)
+    # Checkpoint每步保存一次
+    checkpoint_callback = CheckpointCallback(save_freq=train_config['save_freq'], 
+                                            save_path='output/checkpoints/',
+                                            name_prefix=name_prefix,
+                                            save_replay_buffer=True,
+                                            save_vecnormalize=True,)
 
-    # 每10000步评估一次，并记录评估结果
-    eval_callback = EvalCallback(vec_env, best_model_save_path='./output/best_model/',
-                                log_path='./output/logs/', eval_freq=train_config['eval_freq'],
+    # 每10000步评估一次,并记录评估结果
+    eval_callback = EvalCallback(vec_env, best_model_save_path='output/logs/',
+                                log_path='output/logs/', eval_freq=train_config['eval_freq'],
                                 deterministic=True, render=False)
 
     # 训练模型
@@ -37,5 +40,3 @@ if __name__ == '__main__':
     
     # 保存模型
     model.save("final_model")
-
- 

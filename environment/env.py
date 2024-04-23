@@ -43,7 +43,8 @@ class PredatorPreyEnv(gym.Env):
 
         # Observation space (distance from home, number of visible preys, average position of visible preys, closest prey position)
         self.observation_space = spaces.Dict({
-            "distance_to_home": spaces.Box(low=0, high=self.arena_radius, shape=(1,), dtype=np.float32),  # Scalar
+            "distance_to_home": spaces.Box(low=0, high=self.arena_radius, shape=(1,), dtype=np.float32),
+            "num_visible_preys": spaces.Box(low=0, high=self.num_preys, shape=(1,), dtype=np.int8),
             "average_position_of_visible_preys": spaces.Box(low=np.array([0, -np.pi]), high=np.array([self.arena_radius, np.pi]), dtype=np.float32),  # 2D position
             "closest_prey_position": spaces.Box(low=np.array([0, -np.pi]), high=np.array([self.arena_radius, np.pi]), dtype=np.float32)  # 2D position
         })
@@ -103,7 +104,9 @@ class PredatorPreyEnv(gym.Env):
 
     def _get_observation(self):
         # Calculate observation based on current state
-        visible_preys = [p for p in self.preys.positions if np.linalg.norm(self.predator_position - p) < self.visibility_radius]  # Preys within visibility radius
+        distances = np.linalg.norm(self.predator_position - self.preys.positions, axis=1)
+        visible_preys = self.preys.positions[distances < self.visibility_radius]  # Preys within visibility radius
+        # visible_preys = [p for p in self.preys.positions if np.linalg.norm(self.predator_position - p) < self.visibility_radius]  
         num_visible_preys = len(visible_preys)  # Number of visible preys
         # Calculate average position of visible preys and closest prey position
         if num_visible_preys > 0:
@@ -112,14 +115,18 @@ class PredatorPreyEnv(gym.Env):
         else:
             avg_polar = np.array([0, 0])
         # Closest prey position
-        closest_prey = min(visible_preys, key=lambda p: np.linalg.norm(self.predator_position - p), default=np.array([0, 0]))  # Default value if no visible preys
+        visible_distances = np.linalg.norm(self.predator_position - visible_preys, axis=1)
+        closest_prey_idx = np.argmin(visible_distances)
+        closest_prey = visible_preys[closest_prey_idx] if visible_preys.size > 0 else self.home_position # !!!
+        # closest_prey = min(visible_preys, key=lambda p: np.linalg.norm(self.predator_position - p), default=np.array([0, 0]))  # Default value if no visible preys
         closest_polar = self._cartesian_to_polar(closest_prey - self.predator_position)
         # dtypes of the observation should be float32
-        avg_polar = avg_polar.astype(np.float32)
-        closest_polar = closest_polar.astype(np.float32)
+        # avg_polar = avg_polar.astype(np.float32)
+        # closest_polar = closest_polar.astype(np.float32)
         distance_to_home = np.linalg.norm(self.home_position - self.predator_position)
         return {
             "distance_to_home": np.array([distance_to_home], dtype=np.float32),
+            "num_visible_preys": np.array([num_visible_preys], dtype=np.int8),  # "num_visible_preys": num_visible_preys,
             "average_position_of_visible_preys": avg_polar,
             "closest_prey_position": closest_polar
         }
@@ -159,8 +166,10 @@ class PredatorPreyEnv(gym.Env):
     def _check_done(self):
         # Done if all preys are captured or predator is at home
         current_prey_count = self.preys.get_count()
-        is_at_home = np.linalg.norm(self.predator_position - self.home_position) < self.critical_distance
-        if current_prey_count == 0 or is_at_home:
+        # is_at_home = np.linalg.norm(self.predator_position - self.home_position) < self.critical_distance
+        # if current_prey_count == 0 or is_at_home:
+        #     return True
+        if current_prey_count == 0:
             return True
         return False
 
