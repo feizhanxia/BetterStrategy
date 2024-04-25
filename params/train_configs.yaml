@@ -18,7 +18,7 @@ default0:
   eval_freq: 1000000
 default: 
   n_envs: 10
-  policy: MultiInputPolicy
+  policy: 'MultiInputPolicy'
   model:
     n_steps: 5000
     gamma: 0.999
