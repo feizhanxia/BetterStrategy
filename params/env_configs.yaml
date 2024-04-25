@@ -15,7 +15,7 @@ PredatorPrey-v0:
     critical_distance: 1.0
     num_preys: 1000
     predator_speed: 0.2
-    prey_max_speed: 0.1
+    prey_max_speed: 0.05
     energy_per_step: -0.5
     energy_per_capture: 5.0 
     home_reward_ratio: 10.0

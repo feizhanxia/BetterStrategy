@@ -20,9 +20,8 @@ default:
   n_envs: 10
   policy: MultiInputPolicy
   model:
-    learning_rate: 0.003
-    n_steps: 2048
-    gamma: 0.99
+    n_steps: 5000
+    gamma: 0.999
   total_timesteps: 100000
   save_freq: 10000
   eval_freq: 10000

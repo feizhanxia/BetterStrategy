@@ -21,22 +21,23 @@ if __name__ == '__main__':
     vec_env = make_vec_env(env_id, n_envs=train_config['n_envs'], vec_env_cls=SubprocVecEnv, env_kwargs=env_config)
     
     # 创建并配置PPO算法
-    model = PPO(train_config['policy'], vec_env, verbose=1, tensorboard_log="./output/ppo_tensorboard/", **train_config["model"])
+    model = PPO('MultiInputPolicy', vec_env, verbose=1, tensorboard_log="./output/ppo_tensorboard/", **train_config["model"])
 
-    # Checkpoint每步保存一次
-    checkpoint_callback = CheckpointCallback(save_freq=train_config['save_freq'], 
-                                            save_path='output/checkpoints/',
-                                            name_prefix=name_prefix,
-                                            save_replay_buffer=True,
-                                            save_vecnormalize=True,)
+    # # Checkpoint每步保存一次
+    # checkpoint_callback = CheckpointCallback(save_freq=train_config['save_freq'], 
+    #                                         save_path='output/checkpoints/',
+    #                                         name_prefix=name_prefix,
+    #                                         save_replay_buffer=True,
+    #                                         save_vecnormalize=True,)
 
-    # 每10000步评估一次,并记录评估结果
-    eval_callback = EvalCallback(vec_env, best_model_save_path='output/logs/',
-                                log_path='output/logs/', eval_freq=train_config['eval_freq'],
-                                deterministic=True, render=False)
+    # # 每10000步评估一次,并记录评估结果
+    # eval_callback = EvalCallback(vec_env, best_model_save_path='output/logs/',
+    #                             log_path='output/logs/', eval_freq=train_config['eval_freq'],
+    #                             deterministic=True, render=False)
 
     # 训练模型
-    model.learn(total_timesteps=train_config['total_timesteps'], callback=[checkpoint_callback, eval_callback])
+    # model.learn(total_timesteps=train_config['total_timesteps'], callback=[checkpoint_callback, eval_callback])
     
     # 保存模型
-    model.save("final_model")
+    # model.save("final_model")
+    print(model.policy)
