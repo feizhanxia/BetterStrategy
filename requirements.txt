@@ -13,3 +13,4 @@ rl_zoo3
 sbx-rl
 tensorboard
 pyyaml
+pygame

@@ -8,7 +8,7 @@ import gymnasium as gym
 
 
 env_id = 'PredatorPrey-v0'
-config_id = 'default_3'
+config_id = 'default_2'
 name_prefix = 'predator_prey'
 # 读取配置文件
 with open('./params/env_configs.yaml', 'r') as file:
@@ -17,15 +17,19 @@ with open('./params/train_configs.yaml', 'r') as file:
     train_config = yaml.safe_load(file)[config_id]
 
 if __name__ == '__main__':
+    
     # 创建环境
     vec_env = make_vec_env(env_id, n_envs=train_config['n_envs'], vec_env_cls=SubprocVecEnv, env_kwargs=env_config)
 
     # 创建并配置PPO算法
     model = PPO('MultiInputPolicy', vec_env, verbose=3, tensorboard_log="./output/ppo_tensorboard/", **train_config["model"])
 
+    # 加载训练好的权重
+    model.load("output/checkpoints/default_2/predator_prey_final_model.zip", load_optimizer=False)
+
     # Checkpoint每n步保存一次
     checkpoint_callback = CheckpointCallback(save_freq=train_config['save_freq'], 
-                                            save_path='output/checkpoints/'+config_id+'/',
+                                            save_path='output/checkpoints/'+'default_3'+'/',
                                             name_prefix=name_prefix,
                                             save_replay_buffer=True,
                                             save_vecnormalize=True,)
@@ -34,7 +38,5 @@ if __name__ == '__main__':
     model.learn(total_timesteps=train_config['total_timesteps'], callback=[checkpoint_callback])
     
     # 保存模型
-    model.save("output/checkpoints/"+config_id+"/"+name_prefix+"_final_model")
-    
-    # 打印神经网络结构
-    # print(model.policy)
+    model.save("output/checkpoints/"+'default_3'+"/"+name_prefix+"_final_model")
+

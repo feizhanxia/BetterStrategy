@@ -8,14 +8,42 @@ PredatorPrey-v0:
     prey_max_speed: 0.1
     energy_per_step: -0.1 
     energy_per_capture: 5.0 
+    target_capture_ratio: 1.0
+    is_reward_home: False
     home_reward_ratio: 10.0
-  default:
-    arena_radius: 10.0 
-    visibility_radius: 2.0 
-    critical_distance: 1.0
-    num_preys: 1000
-    predator_speed: 0.2
-    prey_max_speed: 0.05
+  default_1:
+    arena_radius: 30.0 
+    visibility_radius: 10.0 
+    critical_distance: 2.0
+    num_preys: 200
+    predator_speed: 0.5
+    prey_max_speed: 0.1
     energy_per_step: -0.5
     energy_per_capture: 5.0 
+    target_capture_ratio: 0.05
+    is_reward_home: False
+    home_reward_ratio: 10.0
+  default_2:
+    arena_radius: 30.0 
+    visibility_radius: 5.0 
+    critical_distance: 2.0
+    num_preys: 200
+    predator_speed: 0.5
+    prey_max_speed: 0.1
+    energy_per_step: -0.5
+    energy_per_capture: 5.0 
+    target_capture_ratio: 0.1
+    is_reward_home: False
+    home_reward_ratio: 10.0
+  default_3:
+    arena_radius: 30.0 
+    visibility_radius: 5.0 
+    critical_distance: 2.0
+    num_preys: 200
+    predator_speed: 0.5
+    prey_max_speed: 0.1
+    energy_per_step: -0.5
+    energy_per_capture: 5.0 
+    target_capture_ratio: 0.15
+    is_reward_home: True
     home_reward_ratio: 10.0
