@@ -11,7 +11,7 @@ class PredatorPreyEnv(gym.Env):
     """
     Custom environment for Predator-Prey game in a circular arena using gymnasium.
     """
-    metadata = {'render_modes': ['console', 'human', 'rgb_array'], 'render_fps': 60, 'render_return': 'rgb_array'}
+    metadata = {'render_modes': ['console', 'human', 'rgb_array'], 'render_fps': 12, 'render_return': 'rgb_array'}
 
     def __init__(self, 
                 arena_radius=10.0, 

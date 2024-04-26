@@ -16,11 +16,15 @@ with open('./params/env_configs.yaml', 'r') as file:
 # 创建或加载你的Gym环境
 env = gym.make(env_id, **env_config)
 # 加载模型
-model = PPO.load("output/checkpoints/default_1/predator_prey_final_model.zip")
+model = PPO.load("output/checkpoints/default_2/predator_prey_final_model.zip")
 
 # 初始化环境
 obs, _info = env.reset()
 done = False
+
+# 打印神经网络结构
+print('神经网络结构：')
+print(model.policy)
 
 # 创建一个图形窗口以显示环境
 while not done:

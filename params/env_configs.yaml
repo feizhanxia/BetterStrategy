@@ -38,10 +38,10 @@ PredatorPrey-v0:
   default_3:
     arena_radius: 30.0 
     visibility_radius: 5.0 
-    critical_distance: 2.0
-    num_preys: 200
+    critical_distance: 0.5
+    num_preys: 100
     predator_speed: 0.5
-    prey_max_speed: 0.1
+    prey_max_speed: 0.5
     energy_per_step: -0.5
     energy_per_capture: 5.0 
     target_capture_ratio: 0.15
