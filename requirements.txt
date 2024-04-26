@@ -14,3 +14,4 @@ sbx-rl
 tensorboard
 pyyaml
 pygame
+Pillow

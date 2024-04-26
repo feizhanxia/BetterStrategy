@@ -35,11 +35,20 @@ default_2:
   save_freq: 10000
   eval_freq: 10000
 default_3: 
-  n_envs: 24
+  n_envs: 32
   policy: 'MultiInputPolicy'
   model:
     n_steps: 1024
     gamma: 0.999
   total_timesteps: 2000000
+  save_freq: 10000
+  eval_freq: 10000
+default_4: 
+  n_envs: 32
+  policy: 'MultiInputPolicy'
+  model:
+    n_steps: 2048
+    gamma: 0.996
+  total_timesteps: 20000000
   save_freq: 10000
   eval_freq: 10000

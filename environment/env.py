@@ -24,7 +24,8 @@ class PredatorPreyEnv(gym.Env):
                 energy_per_capture=1.0, 
                 target_capture_ratio=0.3,
                 is_reward_home=False, 
-                home_reward_ratio=0.5):
+                home_reward_ratio=0.5,
+                render_mode='human'):
         super(PredatorPreyEnv, self).__init__()
         # Environment parameters
         self.home_position = np.array([0.,0.], dtype=np.float32)  # Center of the arena, home
@@ -69,12 +70,9 @@ class PredatorPreyEnv(gym.Env):
         self.energy = 0.0
         
         # Initialize renderer
-        self.screen_size = 800
-        self.offset = np.array([self.screen_size // 2, self.screen_size // 2])  # 偏移量
-        self.scale = self.screen_size // (2 * self.arena_radius)  # 缩放比例
-        pygame.init()
-        self.screen = pygame.display.set_mode((self.screen_size, self.screen_size))
-        self.clock = pygame.time.Clock()
+        self.render_mode = render_mode
+        self.screen = None
+        self.clock = None
 
     def step(self, action):
         self.preys.move()
@@ -98,43 +96,56 @@ class PredatorPreyEnv(gym.Env):
         info = {}
         return self._get_observation(), info
 
-    def render(self, mode='human'):
+    def render(self):
+        mode = self.render_mode
         if mode not in self.metadata['render_modes']:
             raise ValueError("Unsupported render mode.")
-        if mode == 'console':
+        elif mode == 'console':
             # Simple text representation of positions
             print(f"Predator: {self.predator_position}, Preys: {self.preys.positions}")
             return
-        
-        self.screen.fill((255, 255, 255))  # 填充背景为白色
-        # 绘制活动区域
-        pygame.draw.circle(self.screen, (0, 0, 255), 
-                           self._pos_to_int(self.home_position),
-                           self.arena_radius*self.scale, 2)
-        # 绘制捕食者
-        pygame.draw.circle(self.screen, (255, 0, 0), 
-                           self._pos_to_int(self.predator_position), 
-                           self.critical_distance*self.scale)
-        pygame.draw.circle(self.screen, (200, 200, 200), 
-                           self._pos_to_int(self.predator_position), 
-                           self.visibility_radius*self.scale, 1)
-        # 绘制猎物
-        for prey in self.preys.positions:
-            pygame.draw.circle(self.screen, (0, 255, 0), 
-                               self._pos_to_int(prey), 5)
+        else:
+            if self.screen is None or self.clock is None:
+                self._initialize_renderer()
+            self.screen.fill((255, 255, 255))  # 填充背景为白色
+            # 绘制活动区域
+            pygame.draw.circle(self.screen, (1, 158, 213), 
+                            self._pos_to_int(self.home_position),
+                            self.arena_radius*self.scale, 2)
+            # 绘制家
+            pygame.draw.circle(self.screen, (244, 222, 41), 
+                            self._pos_to_int(self.home_position), 8)
+            # 绘制捕食者
+            pygame.draw.circle(self.screen, (244, 13, 100), 
+                            self._pos_to_int(self.predator_position), 
+                            self.critical_distance*self.scale)
+            pygame.draw.circle(self.screen, (175, 18, 88), 
+                            self._pos_to_int(self.predator_position), 
+                            self.visibility_radius*self.scale, 1)
+            # 绘制猎物
+            for prey in self.preys.positions:
+                pygame.draw.circle(self.screen, (179, 197, 135), 
+                                self._pos_to_int(prey), 5)
         if mode == 'human':
             pygame.display.flip()  # 更新整个待显示的 Surface 对象到屏幕上
             self.clock.tick(12)  # 限制帧率为60fps
         elif mode == 'rgb_array':
             # 创建基于当前屏幕的rgb数组
-            buffer = pygame.surfarray.array3d(pygame.display.get_surface())
+            buffer = pygame.surfarray.array3d(self.screen)
             # 转置数组以符合常见的图像格式
-            buffer = buffer.transpose([1, 0, 2])
-            return buffer
+            return np.transpose(np.array(buffer), axes=(1, 0, 2))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+    
+    def _initialize_renderer(self):
+        self.screen_size = 800
+        self.offset = np.array([self.screen_size // 2, self.screen_size // 2])  # 偏移量
+        self.scale = self.screen_size // (2 * self.arena_radius)  # 缩放比例
+        pygame.init()
+        self.screen = pygame.display.set_mode((self.screen_size, self.screen_size))
+        self.clock = pygame.time.Clock()
         
     def _move_predator(self, action):
         # Update predator position based on the action angle
