@@ -9,7 +9,7 @@ import yaml
 
 
 env_id = 'PredatorPrey-v0'
-config_id = 'default_4'
+config_id = 'default_5'
 name_prefix = 'predator_prey'
 
 # 读取配置文件
@@ -65,15 +65,16 @@ if __name__ == '__main__':
     #             env=vec_env, 
     #             verbose=3, 
     #             tensorboard_log="./output/ppo_tensorboard/",
+    #             learning_rate=linear_schedule(0.002),
     #             **train_config["model"])
     
     # 加载训练好的权重，迁移学习
-    model = PPO.load("output/checkpoints/default_4/predator_prey_final_model.zip", 
-                    env=vec_env, 
-                    verbose=1,
-                    tensorboard_log="./output/ppo_tensorboard/",
-                    learning_rate=linear_schedule(0.002),
-                    **train_config["model"])
+    # model = PPO.load("output/checkpoints/default_4/predator_prey_final_model.zip", 
+    #                 env=vec_env, 
+    #                 verbose=1,
+    #                 tensorboard_log="./output/ppo_tensorboard/",
+    #                 learning_rate=linear_schedule(0.001),
+    #                 **train_config["model"])
 
     # Checkpoint每n步保存一次
     checkpoint_callback = CheckpointCallback(save_freq=train_config['save_freq'], 
@@ -83,11 +84,12 @@ if __name__ == '__main__':
                                             save_vecnormalize=True,)
 
     # 训练模型
-    model.learn(total_timesteps=train_config['total_timesteps'], 
-                progress_bar=True, 
-                reset_num_timesteps=True,
-                callback=[checkpoint_callback])
+    # model.learn(total_timesteps=train_config['total_timesteps'], 
+    #             progress_bar=True, 
+    #             tb_log_name=config_id,
+    #             reset_num_timesteps=False,
+    #             callback=[checkpoint_callback])
     
     # 保存模型
-    model.save("output/checkpoints/"+config_id+"/"+name_prefix+"_final_model")
+    # model.save("output/checkpoints/"+config_id+"/"+name_prefix+"_final_model")
 

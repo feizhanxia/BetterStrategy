@@ -8,7 +8,7 @@ import gymnasium as gym
 import yaml
 
 env_id = 'PredatorPrey-v0'
-config_id = 'default_4'
+config_id = 'default_5'
 # name_prefix = 'predator_prey'
 # 读取配置文件
 with open('./params/env_configs.yaml', 'r') as file:
@@ -16,7 +16,7 @@ with open('./params/env_configs.yaml', 'r') as file:
 # 创建或加载你的Gym环境
 env = gym.make(env_id, **env_config, render_mode='human')
 # 加载模型
-model = PPO.load("output/checkpoints/default_4/predator_prey_5983232_steps.zip")
+model = PPO.load("output/checkpoints/default_4/predator_prey_final_model.zip")
 
 # 初始化环境
 obs, _info = env.reset()

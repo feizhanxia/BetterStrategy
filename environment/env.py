@@ -19,7 +19,9 @@ class PredatorPreyEnv(gym.Env):
                 critical_distance=0.5, 
                 num_preys=100, 
                 predator_speed=0.1,
-                prey_max_speed=0.1,
+                predator_D_0=0.01,
+                predator_D_theta=0.01,
+                prey_D_0=0.05,
                 energy_per_step=-0.1, 
                 energy_per_capture=1.0, 
                 target_capture_ratio=0.3,
@@ -36,7 +38,9 @@ class PredatorPreyEnv(gym.Env):
         
         # Predator & Prey parameters
         self.predator_speed = predator_speed # Speed of the predator
-        self.prey_max_speed = prey_max_speed  # Speed of the preys
+        self.predator_D_0 = predator_D_0
+        self.predator_D_theta = predator_D_theta
+        self.prey_D_0 = prey_D_0  # Speed of the preys
 
         # Reward parameters
         self.energy_per_step = energy_per_step  # Energy cost of moving
@@ -48,6 +52,9 @@ class PredatorPreyEnv(gym.Env):
         
         # Target capture ratio
         self.target_capture_ratio = target_capture_ratio
+
+        # Random number generator
+        self.rng = np.random.default_rng()
 
         # Action space (bearing angle in radians) 
         self.action_space = spaces.Box(low=-1, high=1, shape=(), dtype=np.float32)
@@ -61,12 +68,12 @@ class PredatorPreyEnv(gym.Env):
 
         # Initialize positions of preys and predator (reset)
         self.preys = Prey(self._initialize_prey_positions(),
-                        max_speed=self.prey_max_speed,
+                        D_0=self.prey_D_0,
                         radius=self.arena_radius,
                         center=self.home_position
                         ) 
         self.predator_position = self.home_position 
-        self.predator_angle = np.random.uniform(-np.pi, np.pi)
+        self.predator_angle = self.rng.uniform(-np.pi, np.pi)
         self.energy = 0.0
         
         # Initialize renderer
@@ -87,12 +94,13 @@ class PredatorPreyEnv(gym.Env):
     def reset(self, seed=None, options=None):
         # Seed not used in this environment
         self.preys = Prey(self._initialize_prey_positions(),
-                        max_speed=self.prey_max_speed,
+                        D_0=self.prey_D_0,
                         radius=self.arena_radius,
                         center=self.home_position
                         ) 
         self.predator_position = self.home_position 
-        self.predator_angle = np.random.uniform(-np.pi, np.pi)
+        self.predator_angle = self.rng.uniform(-np.pi, np.pi)
+        self.energy = 0.0
         info = {}
         return self._get_observation(), info
 
@@ -155,9 +163,10 @@ class PredatorPreyEnv(gym.Env):
         angle_to_home = predator_polar[1]
         # 计算新的移动方向
         action_angle = np.pi * action
-        move_angle = angle_to_home + action_angle
+        move_angle = angle_to_home + action_angle + self.rng.normal(0, np.sqrt(2 * self.predator_D_theta))
         # 更新捕食者的位置
-        self.predator_position += self.predator_speed * np.array([np.cos(move_angle), np.sin(move_angle)])
+        self.predator_position += np.array([np.cos(move_angle), np.sin(move_angle)]) * (self.predator_speed 
+                                                                                        + self.rng.normal(0, np.sqrt(2 * self.predator_D_0)))
         # 确保捕食者不会离开定义的活动区域
         self.predator_position = bound_positions(np.array([self.predator_position]), self.home_position, self.arena_radius)[0]
 
@@ -209,7 +218,7 @@ class PredatorPreyEnv(gym.Env):
         for prey_position in self.preys.positions:
             if np.linalg.norm(self.predator_position - prey_position) >= self.critical_distance:
                 remaining_preys.append(prey_position)
-        self.preys.positions = remaining_preys
+        self.preys.positions = np.array(remaining_preys, dtype=np.float32)
 
     def _calculate_reward(self):
         # Reward for moving
