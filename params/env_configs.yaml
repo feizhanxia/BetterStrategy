@@ -83,3 +83,17 @@ PredatorPrey-v0:
     target_capture_ratio: 0.5
     is_reward_home: False
     home_reward_ratio: 10.0
+  default_6:
+    arena_radius: 30.0 
+    visibility_radius: 5.0 
+    critical_distance: 1.0
+    num_preys: 100
+    predator_speed: 0.5
+    predator_D_0: 0.05
+    predator_D_theta: 0.01
+    prey_D_0: 0.1
+    energy_per_step: -0.5
+    energy_per_capture: 5.0 
+    target_capture_ratio: 0.5
+    is_reward_home: False
+    home_reward_ratio: 10.0

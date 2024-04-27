@@ -1,7 +1,5 @@
 import numpy as np
-from numba import jit
 
-@jit(nopython=True, parallel=True)
 def uniform_circle_sample(center, radius, num_samples):
     samples = np.empty((num_samples, 2), dtype=np.float32)
     i=0

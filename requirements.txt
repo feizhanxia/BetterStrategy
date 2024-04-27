@@ -16,3 +16,4 @@ pyyaml
 pygame
 Pillow
 numba
+opencv-python

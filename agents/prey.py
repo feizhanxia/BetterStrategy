@@ -21,7 +21,7 @@ class Prey:
         # 返回当前存活的猎物数量
         return len(self.positions)
     
-@jit(nopython=True, parallel=True)
+@jit(nopython=True, parallel=False, cache=True)
 def brownian_motion(positions, D_0, rng):
     sigma = np.sqrt(2 * D_0)
     deltas = rng.normal(loc=0, scale=sigma, size=positions.shape)

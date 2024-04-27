@@ -119,7 +119,7 @@ class PredatorPreyEnv(gym.Env):
             # 绘制活动区域
             pygame.draw.circle(self.screen, (1, 158, 213), 
                             self._pos_to_int(self.home_position),
-                            self.arena_radius*self.scale, 2)
+                            self.arena_radius*self.scale+6, 2)
             # 绘制家
             pygame.draw.circle(self.screen, (244, 222, 41), 
                             self._pos_to_int(self.home_position), 8)
@@ -148,9 +148,9 @@ class PredatorPreyEnv(gym.Env):
                 sys.exit()
     
     def _initialize_renderer(self):
-        self.screen_size = 800
+        self.screen_size = 1024
         self.offset = np.array([self.screen_size // 2, self.screen_size // 2])  # 偏移量
-        self.scale = self.screen_size // (2 * self.arena_radius)  # 缩放比例
+        self.scale = (self.screen_size-30) / (2 * self.arena_radius)  # 缩放比例
         pygame.init()
         self.screen = pygame.display.set_mode((self.screen_size, self.screen_size))
         self.clock = pygame.time.Clock()
