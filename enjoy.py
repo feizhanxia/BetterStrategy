@@ -13,7 +13,7 @@ config_id = 'default_6'
 name_prefix = 'predator_prey'
 
 # 'record' or 'watch' mode
-mode = 'record' 
+mode = 'watch' 
 
 
 # 读取配置文件

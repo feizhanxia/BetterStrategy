@@ -10,7 +10,7 @@ import yaml
 
 env_id = 'PredatorPrey-v0'
 config_id = 'default_5'
-name_prefix = 'predator_prey'
+name_prefix = 'v2'
 
 # 读取配置文件
 with open('./params/env_configs.yaml', 'r') as file:
@@ -18,23 +18,7 @@ with open('./params/env_configs.yaml', 'r') as file:
 with open('./params/train_configs.yaml', 'r') as file:
     train_config = yaml.safe_load(file)[config_id]
 
-# 自定义Callback以实现实时渲染训练过程和保存超参数
-# class MyCallback(BaseCallback):
-#     """
-#     Saves the hyperparameters at the start of the training, and logs them to TensorBoard.
-#     Renders one environment at each step.
-#     """
-#     def _on_step(self) -> bool:
-#         # self.training_env.render(mode='human')
-#         image = self.training_env.render(mode="rgb_array")
-#         # "HWC" specify the dataformat of the image, here channel last
-#         # (H for height, W for width, C for channel)
-#         # See https://pytorch.org/docs/stable/tensorboard.html
-#         # for supported formats
-#         self.logger.record("output/trajectory/image", Image(image, "HWC"), exclude=("stdout", "log", "json", "csv"))
-#         return True
-
-
+# 线性学习率减小 Callback
 def linear_schedule(initial_value: float) -> Callable[[float], float]:
     """
     Linear learning rate schedule.
@@ -69,11 +53,11 @@ if __name__ == '__main__':
     #             **train_config["model"])
     
     # 加载训练好的权重，迁移学习
-    model = PPO.load("output/checkpoints/default_5/predator_prey_6989312_steps.zip", 
+    model = PPO.load("output/best_model/default_5_v1.zip", 
                     env=vec_env, 
                     verbose=1,
                     tensorboard_log="./output/ppo_tensorboard/",
-                    learning_rate=linear_schedule(0.001),
+                    learning_rate=linear_schedule(0.0004),
                     **train_config["model"],
                     device='cpu')
 
