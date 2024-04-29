@@ -32,7 +32,7 @@ elif mode == 'watch':
     env = gym.make(env_id, **env_config, render_mode='human')
 
 # 加载模型
-model = PPO.load("output/checkpoints/default_5/predator_prey_final_model.zip")
+model = PPO.load("output/checkpoints/default_5/v2_final_model.zip")
 
 # 打印神经网络结构
 print('神经网络结构：')
