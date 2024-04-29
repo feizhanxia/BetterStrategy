@@ -23,7 +23,7 @@ with open('./params/env_configs.yaml', 'r') as file:
 # 创建Gym环境
 if mode == 'record':
     # 视频保存路径和格式设置，并加载Gym环境
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # 使用mp4v编码器
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # type: ignore # 使用mp4v编码器
     save_path = 'output/videos/eval_{}_{}.mp4'.format(name_prefix, config_id)
     out = cv2.VideoWriter(save_path, fourcc, 12, (1024, 1024))
     env = gym.make(env_id, **env_config, render_mode='rgb_array')
@@ -32,7 +32,7 @@ elif mode == 'watch':
     env = gym.make(env_id, **env_config, render_mode='human')
 
 # 加载模型
-model = PPO.load("output/checkpoints/default_5/v2_final_model.zip")
+model = PPO.load("output/checkpoints/default_6/v1_final_model.zip")
 
 # 打印神经网络结构
 print('神经网络结构：')
@@ -45,7 +45,7 @@ while not done:
     if mode == 'record':
         # 保存视频，'rgb_array'模式
         frame = env.render()  # 获取当前环境的图像帧
-        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)  # 将RGB转换为BGR，适用于OpenCV
+        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)  # type: ignore # 将RGB转换为BGR，适用于OpenCV
         out.write(frame)  # 写入帧到视频文件中
     elif mode == 'watch':
         # 渲染环境的当前状态，'human'模式

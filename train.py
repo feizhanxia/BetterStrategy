@@ -10,7 +10,7 @@ import yaml
 
 env_id = 'PredatorPrey-v0'
 config_id = 'default_6'
-name_prefix = 'v1'
+name_prefix = 'v2'
 
 # 读取配置文件
 with open('./params/env_configs.yaml', 'r') as file:
@@ -53,11 +53,11 @@ if __name__ == '__main__':
     #             **train_config["model"])
     
     # 加载训练好的权重，迁移学习
-    model = PPO.load("output/checkpoints/default_5/v2_final_model.zip", 
+    model = PPO.load("output/checkpoints/default_6/v1_final_model.zip", 
                     env=vec_env, 
                     verbose=1,
                     tensorboard_log="./output/ppo_tensorboard/",
-                    learning_rate=linear_schedule(0.001),
+                    learning_rate=0.0001, # linear_schedule(0.0001),
                     **train_config["model"],
                     device='cpu')
 
@@ -71,8 +71,8 @@ if __name__ == '__main__':
     # 训练模型
     model.learn(total_timesteps=train_config['total_timesteps'], 
                 progress_bar=True, 
-                tb_log_name=config_id,
-                reset_num_timesteps=True,
+                tb_log_name=config_id+name_prefix,
+                reset_num_timesteps=False,
                 callback=[checkpoint_callback])
     
     # 保存模型
