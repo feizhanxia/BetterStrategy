@@ -27,7 +27,7 @@ BetterStrategy/
 ├── output/                    # 存储输出和训练结果
 │   ├── best_model/            # 存储选出的代表性的模型权重
 │   ├── checkpoints/           # 每轮训练过程中间自动保存的权重
-│   ├── ppo_tensorboard/       # 存储训练日志文件（tensorboard）
+│   ├── ppo_tensorboard/       # 存储训练日志文件(tensorboard)
 │   └── videos/                # 存储训练好模型的测试渲染视频
 │
 ├── check.py                   # 环境检查代码

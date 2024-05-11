@@ -25,7 +25,7 @@ def linear_schedule(initial_value: float) -> Callable[[float], float]:
 
     :param initial_value: Initial learning rate.
     :return: schedule that computes
-      current learning rate depending on remaining progress
+        current learning rate depending on remaining progress
     """
     def func(progress_remaining: float) -> float:
         """
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     # 创建环境
     vec_env = make_vec_env(env_id, n_envs=train_config['n_envs'], vec_env_cls=SubprocVecEnv, env_kwargs=env_config)
 
-    # 创建并配置PPO算法，训练新模型
+    # 创建并配置PPO算法,训练新模型
     # model = PPO('MultiInputPolicy', 
     #             env=vec_env, 
     #             verbose=3, 
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     #             learning_rate=linear_schedule(0.002),
     #             **train_config["model"])
     
-    # 加载训练好的权重，迁移学习
+    # 加载训练好的权重,迁移学习
     model = PPO.load("output/checkpoints/default_6/v1_final_model.zip", 
                     env=vec_env, 
                     verbose=1,

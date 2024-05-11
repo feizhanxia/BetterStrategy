@@ -27,6 +27,7 @@ class PredatorPreyEnv(gym.Env):
                 target_capture_ratio=0.3,
                 is_reward_home=False, 
                 home_reward_ratio=0.5,
+                put_back=False,
                 render_mode='human'):
         super(PredatorPreyEnv, self).__init__()
         # Environment parameters
@@ -52,6 +53,9 @@ class PredatorPreyEnv(gym.Env):
         
         # Target capture ratio
         self.target_capture_ratio = target_capture_ratio
+        
+        # Put back captured preys in the arena
+        self.put_back = put_back  
 
         # Random number generator
         self.rng = np.random.default_rng()
@@ -67,14 +71,7 @@ class PredatorPreyEnv(gym.Env):
         })
 
         # Initialize positions of preys and predator (reset)
-        self.preys = Prey(self._initialize_prey_positions(),
-                        D_0=self.prey_D_0,
-                        radius=self.arena_radius,
-                        center=self.home_position
-                        ) 
-        self.predator_position = self.home_position 
-        self.predator_angle = self.rng.uniform(-np.pi, np.pi)
-        self.energy = 0.0
+        self.reset()
         
         # Initialize renderer
         self.render_mode = render_mode
@@ -93,7 +90,7 @@ class PredatorPreyEnv(gym.Env):
 
     def reset(self, seed=None, options=None):
         # Seed not used in this environment
-        self.preys = Prey(self._initialize_prey_positions(),
+        self.preys = Prey(self.num_preys,
                         D_0=self.prey_D_0,
                         radius=self.arena_radius,
                         center=self.home_position
@@ -101,6 +98,7 @@ class PredatorPreyEnv(gym.Env):
         self.predator_position = self.home_position 
         self.predator_angle = self.rng.uniform(-np.pi, np.pi)
         self.energy = 0.0
+        self.capture_count = 0
         info = {}
         return self._get_observation(), info
 
@@ -202,14 +200,15 @@ class PredatorPreyEnv(gym.Env):
             "average_position_of_visible_preys": avg_polar,
             "closest_prey_position": closest_polar
         }
-
+        
     def _cartesian_to_polar(self, cartesian_coords):
         rho = np.linalg.norm(cartesian_coords)
         phi = np.arctan2(cartesian_coords[1], cartesian_coords[0])
         return np.array([rho, phi], dtype=np.float32)
     
     def _imagine(self):
-        return uniform_circle_sample(self.predator_position, self.visibility_radius, 1)[0]
+        # return uniform_circle_sample(self.predator_position, self.visibility_radius, 1)[0]
+        return self.predator_position
 
 
     def _check_capture(self):
@@ -227,7 +226,12 @@ class PredatorPreyEnv(gym.Env):
         num_preys_before = len(self.preys.positions)
         self._check_capture()
         num_preys_after = len(self.preys.positions)
-        num_captured = num_preys_before - num_preys_after  
+        num_captured = num_preys_before - num_preys_after 
+        # Update capture count
+        self.capture_count += num_captured
+        # Put new preys in the arena
+        if num_captured > 0 and self.put_back:
+            self.preys.add(num_captured)
         # Reward for capturing preys
         reward += num_captured * self.energy_per_capture  
         # Update energy
@@ -241,17 +245,16 @@ class PredatorPreyEnv(gym.Env):
 
     def _check_done(self):
         # Done if all preys are captured or predator is at home
-        current_prey_count = self.preys.get_count()
         # is_at_home = np.linalg.norm(self.predator_position - self.home_position) < self.critical_distance
         # if current_prey_count == 0 or is_at_home:
         #     return True
-        if current_prey_count <= int(self.num_preys * (1-self.target_capture_ratio)):
+        if self.capture_count >= int(self.num_preys * self.target_capture_ratio):
             return True
         return False
 
-    def _initialize_prey_positions(self):
-        # This method calls the sampling utility to generate initial positions
-        return uniform_circle_sample(self.home_position, self.arena_radius, self.num_preys)
+    # def _initialize_prey_positions(self):
+    #     # This method calls the sampling utility to generate initial positions
+    #     return uniform_circle_sample(self.home_position, self.arena_radius, self.num_preys)
     
     def _pos_to_int(self, position):
         # 应用缩放

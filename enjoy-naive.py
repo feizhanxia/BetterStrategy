@@ -32,11 +32,11 @@ elif mode == 'watch':
     env = gym.make(env_id, **env_config, render_mode='human')
 
 # 加载模型
-model = PPO.load("output/best_model/default_5_v2.zip")
+# model = PPO.load("output/checkpoints/default_6/v1_final_model.zip")
 
 # 打印神经网络结构
-print('神经网络结构:')
-print(model.policy)
+# print('神经网络结构:')
+# print(model.policy)
 
 # 初始化环境并运行
 obs, _info = env.reset()
@@ -51,7 +51,8 @@ while not done:
         # 渲染环境的当前状态,'human'模式
         env.render()
     # 预测动作
-    action, _states = model.predict(obs, deterministic=True)
+    # action, _states = model.predict(obs, deterministic=True)
+    action = obs['closest_prey_position'][1]
     obs, reward, done, _truncated, info = env.step(action)
 
 if mode == 'record':
