@@ -70,3 +70,12 @@ default_6:
   total_timesteps: 5000000
   save_freq: 10000
   eval_freq: 10000
+default_7:
+  n_envs: 32
+  policy: 'MultiInputPolicy'
+  model:
+    n_steps: 2048
+    gamma: 0.997
+  total_timesteps: 8000000
+  save_freq: 20000
+  eval_freq: 20000
