@@ -93,7 +93,7 @@ default_9:
   policy: 'MultiInputPolicy'
   model:
     n_steps: 2048
-    gamma: 0.997
+    gamma: 0.998
   total_timesteps: 8000000
   save_freq: 20000
   eval_freq: 20000

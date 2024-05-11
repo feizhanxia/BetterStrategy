@@ -11,6 +11,7 @@ import cv2
 env_id = 'PredatorPrey-v0'
 config_id = 'default_7'
 name_prefix = 'predator_prey'
+model_path = 'output/checkpoints/default_9/put_back_home_v0_final_model.zip'
 
 # 'record' or 'watch' mode
 mode = 'watch' 
@@ -32,7 +33,7 @@ elif mode == 'watch':
     env = gym.make(env_id, **env_config, render_mode='human')
 
 # 加载模型
-model = PPO.load("output/best_model/default_5_v2.zip")
+model = PPO.load(model_path)
 
 # 打印神经网络结构
 print('神经网络结构:')
