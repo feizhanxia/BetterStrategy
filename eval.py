@@ -10,7 +10,7 @@ import cv2
 
 # 设置环境ID和配置ID
 env_id = 'PredatorPrey-v0'
-config_id = 'default_9'
+config_id = 'default_7'
 name_prefix = 'predator_prey'
 # model_path = 'output/checkpoints/default_9/put_back_home_v1_7040000_steps.zip'
 models = [
@@ -27,7 +27,7 @@ with open('./params/env_configs.yaml', 'r') as file:
 if __name__ == '__main__':
     
     # 创建环境
-    vec_env = make_vec_env(env_id, n_envs=40, vec_env_cls=SubprocVecEnv, env_kwargs=env_config)
+    vec_env = make_vec_env(env_id, n_envs=10, vec_env_cls=SubprocVecEnv, env_kwargs=env_config)
     
     for path in models:
         # 加载模型

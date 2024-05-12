@@ -81,12 +81,12 @@ class PredatorPreyEnv(gym.Env):
     def step(self, action):
         self.preys.move()
         self._move_predator(action)
-        observation = self._get_observation()
         reward = self._calculate_reward()
+        self.reward += reward
+        observation = self._get_observation()
         terminated = self._check_done()
-        info = {'reward': reward}
         truncated = False
-        return observation, reward, terminated, truncated, info
+        return observation, reward, terminated, truncated, self._get_info()
 
     def reset(self, seed=None, options=None):
         # Seed not used in this environment
@@ -98,9 +98,9 @@ class PredatorPreyEnv(gym.Env):
         self.predator_position = self.home_position 
         self.predator_angle = self.rng.uniform(-np.pi, np.pi)
         self.energy = 0.0
+        self.reward = 0.0
         self.capture_count = 0
-        info = {}
-        return self._get_observation(), info
+        return self._get_observation(), self._get_info()
 
     def render(self):
         mode = self.render_mode
@@ -120,7 +120,8 @@ class PredatorPreyEnv(gym.Env):
                             self.arena_radius*self.scale+6, 2)
             # 绘制家
             pygame.draw.circle(self.screen, (244, 222, 41), 
-                            self._pos_to_int(self.home_position), 8)
+                            self._pos_to_int(self.home_position), 
+                            self.critical_distance*self.scale)
             # 绘制捕食者
             pygame.draw.circle(self.screen, (244, 13, 100), 
                             self._pos_to_int(self.predator_position), 
@@ -201,6 +202,14 @@ class PredatorPreyEnv(gym.Env):
             "closest_prey_position": closest_polar
         }
         
+    def _get_info(self):
+        # Return information about the environment
+        return {
+            "reward": self.reward,
+            "energy": self.energy,
+            "capture_count": self.capture_count
+        }
+    
     def _cartesian_to_polar(self, cartesian_coords):
         rho = np.linalg.norm(cartesian_coords)
         phi = np.arctan2(cartesian_coords[1], cartesian_coords[0])

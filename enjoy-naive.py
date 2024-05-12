@@ -1,9 +1,8 @@
 import gymnasium as gym
 import numpy as np
 import environment
-from stable_baselines3.common.env_util import make_vec_env
+from agents.my_policies import GreedyPolicy
 from stable_baselines3 import PPO
-import gymnasium as gym
 import yaml
 import cv2
 
@@ -32,11 +31,7 @@ elif mode == 'watch':
     env = gym.make(env_id, **env_config, render_mode='human')
 
 # 加载模型
-# model = PPO.load("output/checkpoints/default_6/v1_final_model.zip")
-
-# 打印神经网络结构
-# print('神经网络结构:')
-# print(model.policy)
+model = GreedyPolicy(env.observation_space, env.action_space)
 
 # 初始化环境并运行
 obs, _info = env.reset()
@@ -51,8 +46,7 @@ while not done:
         # 渲染环境的当前状态,'human'模式
         env.render()
     # 预测动作
-    # action, _states = model.predict(obs, deterministic=True)
-    action = obs['closest_prey_position'][1]
+    action, _states = model.predict(obs, deterministic=True)
     obs, reward, done, _truncated, info = env.step(action)
 
 if mode == 'record':
