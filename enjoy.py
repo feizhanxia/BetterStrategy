@@ -1,17 +1,15 @@
 import gymnasium as gym
 import numpy as np
 import environment
-from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3 import PPO
-import gymnasium as gym
 import yaml
 import cv2
 
 # 设置环境ID和配置ID
 env_id = 'PredatorPrey-v0'
-config_id = 'default_7'
+config_id = 'default_9'
 name_prefix = 'predator_prey'
-model_path = 'output/checkpoints/default_9/put_back_home_v0_final_model.zip'
+model_path = 'output/checkpoints/default_8/put_back_v0_7680000_steps.zip'
 
 # 'record' or 'watch' mode
 mode = 'watch' 

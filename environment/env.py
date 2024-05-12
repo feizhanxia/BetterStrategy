@@ -241,6 +241,7 @@ class PredatorPreyEnv(gym.Env):
             is_at_home = np.linalg.norm(self.predator_position - self.home_position) < self.critical_distance
             if is_at_home:
                 reward += self.energy * self.home_reward_ratio
+                self.energy = 0.0
         return reward
 
     def _check_done(self):
