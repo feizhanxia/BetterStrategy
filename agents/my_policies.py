@@ -9,7 +9,6 @@ class GreedyPolicy(BasePolicy):
                 observation_space: spaces.Space,
                 action_space: spaces.Box):
         super().__init__(observation_space, action_space)
-        # self.model = model
     
     # def _predict(self, observation, state=None, episode_start=None, deterministic=True):
     #     # 获取数据
@@ -21,7 +20,6 @@ class GreedyPolicy(BasePolicy):
     #     else:
     #         action = closest_prey_position[1] / np.pi  # 向最近的猎物移动
     #     return action
-    # import torch as th
 
     def _predict(self, observation, state=None, episode_start=None, deterministic=True):
         # 直接从字典中取出张量
@@ -37,4 +35,17 @@ class GreedyPolicy(BasePolicy):
         # 计算非零位置的动作
         action[~zero_condition] = closest_prey_position[~zero_condition, 1] / th.tensor(np.pi, device=closest_prey_position.device)
         
+        return action
+
+
+class RandomPolicy(BasePolicy):
+    def __init__(self, 
+                observation_space: spaces.Space,
+                action_space: spaces.Box):
+        super().__init__(observation_space, action_space)
+
+    def _predict(self, observation, state=None, episode_start=None, deterministic=True):
+        # 直接从字典中取出张量
+        closest_prey_position = observation['closest_prey_position']
+        action = 2 * th.rand(closest_prey_position[:, 0].shape, device=closest_prey_position.device) - 1
         return action

@@ -83,6 +83,7 @@ class PredatorPreyEnv(gym.Env):
         self._move_predator(action)
         reward = self._calculate_reward()
         self.reward += reward
+        self.num_steps += 1
         observation = self._get_observation()
         terminated = self._check_done()
         truncated = False
@@ -100,6 +101,7 @@ class PredatorPreyEnv(gym.Env):
         self.energy = 0.0
         self.reward = 0.0
         self.capture_count = 0
+        self.num_steps = 0
         return self._get_observation(), self._get_info()
 
     def render(self):
@@ -207,7 +209,8 @@ class PredatorPreyEnv(gym.Env):
         return {
             "reward": self.reward,
             "energy": self.energy,
-            "capture_count": self.capture_count
+            "capture_count": self.capture_count,
+            "num_steps": self.num_steps
         }
     
     def _cartesian_to_polar(self, cartesian_coords):
