@@ -9,7 +9,7 @@ import cv2
 env_id = 'PredatorPrey-v0'
 config_id = 'default_10'
 name_prefix = 'predator_prey'
-model_path = 'output/checkpoints/default_8/put_back_v0_7680000_steps.zip'
+model_path = 'output/checkpoints/default_11/default_11_v0_7680000_steps.zip'
 
 # 'record' or 'watch' mode
 mode = 'watch' 

@@ -186,3 +186,45 @@ PredatorPrey-v0:
     target_capture_ratio: 0.7
     put_back: False
     is_reward_home: False
+  eval_random_0:
+    arena_radius: 40.0 
+    visibility_radius: 5.0 
+    critical_distance: 1.0
+    num_preys: 200
+    predator_speed: 0.5
+    predator_D_0: 0.5
+    predator_D_theta: 0.2
+    prey_D_0: 0.1
+    energy_per_step: -0.5
+    energy_per_capture: 10.0 
+    target_capture_ratio: 0.7
+    put_back: False
+    is_reward_home: False
+  put_back_0:
+    arena_radius: 40.0 
+    visibility_radius: 5.0 
+    critical_distance: 1.0
+    num_preys: 100
+    predator_speed: 0.5
+    predator_D_0: 0.05
+    predator_D_theta: 0.05
+    prey_D_0: 0.1
+    energy_per_step: 0
+    energy_per_capture: 1
+    target_capture_ratio: 0.5
+    put_back: True
+    is_reward_home: False
+  eval_1:
+    arena_radius: 40.0 
+    visibility_radius: 5.0 
+    critical_distance: 1.0
+    num_preys: 160
+    predator_speed: 0.5
+    predator_D_0: 0.05
+    predator_D_theta: 0.05
+    prey_D_0: 0.1
+    energy_per_step: -0.5
+    energy_per_capture: 10.0 
+    target_capture_ratio: 0.5
+    put_back: False
+    is_reward_home: False
