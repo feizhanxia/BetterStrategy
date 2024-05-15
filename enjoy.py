@@ -9,7 +9,7 @@ import cv2
 env_id = 'PredatorPrey-v0'
 config_id = 'default_10'
 name_prefix = 'predator_prey'
-model_path = 'output/checkpoints/default_11/default_11_v0_7680000_steps.zip'
+model_path = 'output/checkpoints/default_10/default_10_v0_9600000_steps.zip'
 
 # 'record' or 'watch' mode
 mode = 'watch' 
@@ -18,6 +18,12 @@ mode = 'watch'
 # 读取配置文件
 with open('./params/env_configs.yaml', 'r') as file:
     env_config = yaml.safe_load(file)[env_id][config_id]
+# 设置特殊参数
+# env_config['num_preys'] = 1
+# env_config['predator_speed'] = 1.5
+# env_config['predator_D_0'] = 0.0
+# env_config['predator_D_theta'] = 0.0
+# env_config['prey_D_0'] = 0.0
 
 # 创建Gym环境
 if mode == 'record':
@@ -49,8 +55,7 @@ while not done:
     elif mode == 'watch':
         # 渲染环境的当前状态,'human'模式
         env.render()
-    # 预测动作
-    action, _states = model.predict(obs, deterministic=True)
+    action, _states = model.predict(obs , deterministic=True)
     obs, reward, done, _truncated, info = env.step(action)
 
 if mode == 'record':

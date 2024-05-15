@@ -215,8 +215,8 @@ PredatorPrey-v0:
     put_back: True
     is_reward_home: False
   eval_1:
-    arena_radius: 40.0 
-    visibility_radius: 5.0 
+    arena_radius: 40.0
+    visibility_radius: 5.0
     critical_distance: 1.0
     num_preys: 160
     predator_speed: 0.5

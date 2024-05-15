@@ -84,6 +84,7 @@ class PredatorPreyEnv(gym.Env):
         reward = self._calculate_reward()
         self.reward += reward
         self.num_steps += 1
+        self.track.append(self.predator_position)
         observation = self._get_observation()
         terminated = self._check_done()
         truncated = False
@@ -102,6 +103,7 @@ class PredatorPreyEnv(gym.Env):
         self.reward = 0.0
         self.capture_count = 0
         self.num_steps = 0
+        self.track = []
         return self._get_observation(), self._get_info()
 
     def render(self):
@@ -135,6 +137,10 @@ class PredatorPreyEnv(gym.Env):
             for prey in self.preys.positions:
                 pygame.draw.circle(self.screen, (179, 197, 135), 
                                 self._pos_to_int(prey), 5)
+            # 绘制轨迹
+            if len(self.track) > 1:
+                pygame.draw.lines(self.screen, (0, 0, 0), False, 
+                                [self._pos_to_int(p) for p in self.track], 2)
         if mode == 'human':
             pygame.display.flip()  # 更新整个待显示的 Surface 对象到屏幕上
             self.clock.tick(12)  # 限制帧率为60fps
@@ -173,6 +179,10 @@ class PredatorPreyEnv(gym.Env):
 
     def _get_observation(self):
         # Calculate observation based on current state
+        # Calculate distance to home
+        predator_polar = self._cartesian_to_polar(self.predator_position - self.home_position)
+        distance_to_home = predator_polar[0]
+        angle_to_home = predator_polar[1]
         # Calculate distances to preys
         distances = np.linalg.norm(self.predator_position - self.preys.positions, axis=1)
         # Preys within visibility radius
@@ -185,18 +195,17 @@ class PredatorPreyEnv(gym.Env):
             visible_distances = np.linalg.norm(self.predator_position - visible_preys, axis=1)
             closest_prey_idx = np.argmin(visible_distances)
             closest_prey = visible_preys[closest_prey_idx]
+            # Polar of average position and closest prey position  of visible preys
+            avg_polar = self._cartesian_to_polar(avg_position - self.predator_position)
+            closest_polar = self._cartesian_to_polar(closest_prey - self.predator_position)
+            avg_polar[1] = map_to_minus_pi_to_pi(avg_polar[1]-angle_to_home)
+            closest_polar[1] = map_to_minus_pi_to_pi(closest_polar[1]-angle_to_home)
         else:
             avg_position = self._imagine()
             closest_prey = self._imagine()
-        # Polar of average position and closest prey position  of visible preys
-        avg_polar = self._cartesian_to_polar(avg_position - self.predator_position)
-        closest_polar = self._cartesian_to_polar(closest_prey - self.predator_position)
-        # Calculate relative position, distance to home
-        predator_polar = self._cartesian_to_polar(self.predator_position - self.home_position)
-        distance_to_home = predator_polar[0]
-        angle_to_home = predator_polar[1]
-        avg_polar[1] -= angle_to_home
-        closest_polar[1] -= angle_to_home
+            avg_polar = np.array([0., 0.], dtype=np.float32)
+            closest_polar = np.array([0., 0.], dtype=np.float32)
+        
         # Return observation
         return {
             "distance_to_home": np.array([distance_to_home], dtype=np.float32),
@@ -277,5 +286,19 @@ class PredatorPreyEnv(gym.Env):
         return final_position
 
         
-        
+def map_to_minus_pi_to_pi(x):
+    """
+    将输入x映射到[-pi, pi]之间.
+    支持对NumPy数组进行广播操作.
+    
+    参数:
+    x - 一个数值或NumPy数组
+    
+    返回:
+    映射到[-pi, pi]之间的数值或NumPy数组
+    """
+    x = np.asarray(x)  # 将输入转换为NumPy数组,以支持广播
+    x = x % (2 * np.pi)  # 规范到[0, 2*pi)
+    x = np.where(x > np.pi, x - 2 * np.pi, x)  # 映射到[-pi, pi]
+    return x
 
