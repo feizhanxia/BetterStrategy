@@ -13,15 +13,21 @@ env_id = 'PredatorPrey-v0'
 config_id = 'eval_1'
 name_prefix = 'predator_prey'
 # model_path = 'output/checkpoints/default_9/put_back_home_v1_7040000_steps.zip'
-models = [    
-    "output/checkpoints/default_8/put_back_v0_7680000_steps.zip",
-    "output/checkpoints/default_9/put_back_home_v1_7680000_steps.zip",
-    "output/checkpoints/default_10/default_10_v0_7680000_steps.zip",
-    "output/checkpoints/default_10/default_10_v0_8320000_steps.zip",
-    "output/checkpoints/default_10/default_10_v0_8960000_steps.zip",
-    "output/checkpoints/default_10/default_10_v0_9600000_steps.zip",
-    "output/checkpoints/default_11/default_11_v0_7040000_steps.zip",
-    "output/checkpoints/default_11/default_11_v0_7680000_steps.zip",
+models = [   
+    "output/checkpoints/default_7/no_put_back_v1_6400000_steps.zip", 
+    "output/checkpoints/default_7/no_put_back_v1_7680000_steps.zip",
+    "output/checkpoints/default_8/put_back_v1_6400000_steps.zip",
+    "output/checkpoints/default_8/put_back_v1_7040000_steps.zip",
+    "output/checkpoints/default_8/put_back_v1_7680000_steps.zip",
+    "output/checkpoints/default_9/put_back_home_v2_6400000_steps.zip",
+    "output/checkpoints/default_9/put_back_home_v2_7040000_steps.zip",
+    "output/checkpoints/default_9/put_back_home_v2_7680000_steps.zip",
+    "output/checkpoints/default_10/default_10_v1_8320000_steps.zip",
+    "output/checkpoints/default_10/default_10_v1_8960000_steps.zip",
+    "output/checkpoints/default_10/default_10_v1_9600000_steps.zip",
+    "output/checkpoints/default_11/default_11_v1_6400000_steps.zip",
+    "output/checkpoints/default_11/default_11_v1_7040000_steps.zip",
+    "output/checkpoints/default_11/default_11_v1_7680000_steps.zip",
 ]
 # 读取配置文件
 with open('./params/env_configs.yaml', 'r') as file:
