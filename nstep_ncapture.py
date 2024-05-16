@@ -16,12 +16,12 @@ from stable_baselines3.common.callbacks import BaseCallback
 
 # 设置环境ID和配置ID
 env_id = 'PredatorPrey-v0'
-config_id = 'put_back_0'
-name_prefix = 'greedy' # 'smart' or 'greedy' or 'random'
-episodes = 500
+config_id = 'eval_0'
+name_prefix = 'random' # 'smart' or 'greedy' or 'random'
+episodes = 1000
 n_envs = 10
 save_path = 'analysis/data/nstep_ncap_{}_{}_{}.csv'.format(config_id, name_prefix, episodes)
-model_path = './output/checkpoints/default_8/put_back_v0_7680000_steps.zip'
+model_path = './output/checkpoints/default_8/put_back_v1_7040000_steps.zip'
 
 
 

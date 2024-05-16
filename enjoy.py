@@ -9,7 +9,7 @@ import cv2
 env_id = 'PredatorPrey-v0'
 config_id = 'default_10'
 name_prefix = 'predator_prey'
-model_path = 'output/checkpoints/default_10/default_10_v0_9600000_steps.zip'
+model_path = 'output/checkpoints/default_8/put_back_v1_7040000_steps.zip'
 
 # 'record' or 'watch' mode
 mode = 'watch' 
@@ -19,11 +19,11 @@ mode = 'watch'
 with open('./params/env_configs.yaml', 'r') as file:
     env_config = yaml.safe_load(file)[env_id][config_id]
 # 设置特殊参数
-# env_config['num_preys'] = 1
-# env_config['predator_speed'] = 1.5
-# env_config['predator_D_0'] = 0.0
-# env_config['predator_D_theta'] = 0.0
-# env_config['prey_D_0'] = 0.0
+env_config['num_preys'] = 1
+env_config['predator_speed'] = 1.5
+env_config['predator_D_0'] = 0.0
+env_config['predator_D_theta'] = 0.0
+env_config['prey_D_0'] = 0.0
 
 # 创建Gym环境
 if mode == 'record':
@@ -40,11 +40,11 @@ elif mode == 'watch':
 model = PPO.load(model_path)
 
 # 打印神经网络结构
-print('神经网络结构:')
-print(model.policy)
+# print('神经网络结构:')
+# print(model.policy)
 
 # 初始化环境并运行
-obs, _info = env.reset()
+obs, info = env.reset()
 done = False
 while not done:
     if mode == 'record':
@@ -57,6 +57,9 @@ while not done:
         env.render()
     action, _states = model.predict(obs , deterministic=True)
     obs, reward, done, _truncated, info = env.step(action)
+
+# record track
+track = info['track']
 
 if mode == 'record':
     print("视频保存完毕!")

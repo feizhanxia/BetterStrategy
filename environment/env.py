@@ -219,7 +219,8 @@ class PredatorPreyEnv(gym.Env):
             "reward": self.reward,
             "energy": self.energy,
             "capture_count": self.capture_count,
-            "num_steps": self.num_steps
+            "num_steps": self.num_steps,
+            "track": self.track
         }
     
     def _cartesian_to_polar(self, cartesian_coords):

@@ -115,3 +115,48 @@ default_11:
   total_timesteps: 8000000
   save_freq: 20000
   eval_freq: 20000
+default_12:
+  n_envs: 32
+  policy: 'MultiInputPolicy'
+  model:
+    n_steps: 2048
+    gamma: 0.998
+  total_timesteps: 8000000
+  save_freq: 20000
+  eval_freq: 20000
+default_13:
+  n_envs: 32
+  policy: 'MultiInputPolicy'
+  model:
+    n_steps: 2048
+    gamma: 0.998
+  total_timesteps: 8000000
+  save_freq: 20000
+  eval_freq: 20000
+default_14:
+  n_envs: 32
+  policy: 'MultiInputPolicy'
+  model:
+    n_steps: 2048
+    gamma: 0.998
+  total_timesteps: 8000000
+  save_freq: 20000
+  eval_freq: 20000
+default_15:
+  n_envs: 32
+  policy: 'MultiInputPolicy'
+  model:
+    n_steps: 2048
+    gamma: 0.998
+  total_timesteps: 8000000
+  save_freq: 20000
+  eval_freq: 20000
+default_16:
+  n_envs: 32
+  policy: 'MultiInputPolicy'
+  model:
+    n_steps: 4096
+    gamma: 0.999
+  total_timesteps: 8000000
+  save_freq: 20000
+  eval_freq: 20000

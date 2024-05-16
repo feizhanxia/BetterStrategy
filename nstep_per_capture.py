@@ -21,8 +21,8 @@ name_prefix = 'smart' # 'smart' or 'greedy' or 'random'
 episodes = 500
 n_envs = 10
 save_path = 'analysis/data/ave_steps_{}_{}_{}.csv'.format(config_id, name_prefix, episodes)
-model_path = './output/checkpoints/default_8/put_back_v0_7680000_steps.zip'
-num_preys_list = list(range(50, 205, 5))
+model_path = './output/checkpoints/default_8/put_back_v1_7040000_steps.zip'
+num_preys_list = list(range(10, 125, 5))
 
 
 # 读取配置文件

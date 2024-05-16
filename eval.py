@@ -10,7 +10,7 @@ import cv2
 
 # 设置环境ID和配置ID
 env_id = 'PredatorPrey-v0'
-config_id = 'eval_1'
+config_id = 'put_back_0' # 'eval_1'
 name_prefix = 'predator_prey'
 # model_path = 'output/checkpoints/default_9/put_back_home_v1_7040000_steps.zip'
 models = [   

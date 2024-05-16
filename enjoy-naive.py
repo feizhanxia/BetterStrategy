@@ -18,12 +18,6 @@ mode = 'watch'
 # 读取配置文件
 with open('./params/env_configs.yaml', 'r') as file:
     env_config = yaml.safe_load(file)[env_id][config_id]
-# 设置特殊参数
-env_config['num_preys'] = 1
-env_config['predator_speed'] = 0.5
-env_config['predator_D_0'] = 0.0
-env_config['predator_D_theta'] = 0.0
-env_config['prey_D_0'] = 0.0
 
 # 创建Gym环境
 if mode == 'record':
@@ -52,11 +46,11 @@ while not done:
         # 渲染环境的当前状态,'human'模式
         env.render()
     # 预测动作
-    # action, _states = model.predict(obs, deterministic=True)
+    action, _states = model.predict(obs, deterministic=True)
     # fix
-    r = obs['distance_to_home'][0]
-    R = 40.0
-    action = (r-r**2+r**3-r**4)/(R-R**2+R**3-R**4)
+    # r = obs['distance_to_home'][0]
+    # R = 40.0
+    # action = (r-r**2+r**3-r**4)/(R-R**2+R**3-R**4)
     obs, reward, done, _truncated, info = env.step(action)
 
 if mode == 'record':
