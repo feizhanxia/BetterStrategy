@@ -7,7 +7,7 @@ import cv2
 
 # 设置环境ID和配置ID
 env_id = 'PredatorPrey-v0'
-config_id = 'default_10'
+config_id = 'default_14'
 name_prefix = 'predator_prey'
 model_path = 'output/checkpoints/default_8/put_back_v1_7040000_steps.zip'
 
@@ -19,11 +19,11 @@ mode = 'watch'
 with open('./params/env_configs.yaml', 'r') as file:
     env_config = yaml.safe_load(file)[env_id][config_id]
 # 设置特殊参数
-env_config['num_preys'] = 1
-env_config['predator_speed'] = 1.5
-env_config['predator_D_0'] = 0.0
-env_config['predator_D_theta'] = 0.0
-env_config['prey_D_0'] = 0.0
+# env_config['num_preys'] = 1
+# env_config['predator_speed'] = 1.5
+# env_config['predator_D_0'] = 0.0
+# env_config['predator_D_theta'] = 0.0
+# env_config['prey_D_0'] = 0.0
 
 # 创建Gym环境
 if mode == 'record':
