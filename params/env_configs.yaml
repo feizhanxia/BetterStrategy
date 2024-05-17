@@ -229,7 +229,7 @@ PredatorPrey-v0:
     put_back: False
     is_reward_home: False
   default_12:
-    arena_radius: 50.0 
+    arena_radius: 40.0 
     visibility_radius: 10.0 
     critical_distance: 1.0
     predator_speed: 0.5
@@ -238,12 +238,12 @@ PredatorPrey-v0:
     prey_D_0: 0.1
     energy_per_step: -0.5
     energy_per_capture: 10.0 
-    num_preys: 100
-    target_capture_ratio: 0.6
+    num_preys: 160
+    target_capture_ratio: 0.3
     put_back: False
     is_reward_home: False
   default_13:
-    arena_radius: 50.0 
+    arena_radius: 40.0 
     visibility_radius: 10.0 
     critical_distance: 1.0
     predator_speed: 0.5
@@ -252,12 +252,12 @@ PredatorPrey-v0:
     prey_D_0: 0.1
     energy_per_step: -0.5
     energy_per_capture: 10.0 
-    num_preys: 100
-    target_capture_ratio: 0.6
+    num_preys: 160
+    target_capture_ratio: 0.3
     put_back: True
     is_reward_home: False
   default_14:
-    arena_radius: 50.0 
+    arena_radius: 40.0 
     visibility_radius: 10.0 
     critical_distance: 1.0
     predator_speed: 0.5
@@ -267,11 +267,11 @@ PredatorPrey-v0:
     energy_per_step: -0.5
     energy_per_capture: 10.0 
     num_preys: 200
-    target_capture_ratio: 0.8
+    target_capture_ratio: 0.5
     put_back: False
     is_reward_home: False
   default_15:
-    arena_radius: 50.0 
+    arena_radius: 40.0 
     visibility_radius: 10.0 
     critical_distance: 1.0
     predator_speed: 0.5
@@ -280,12 +280,12 @@ PredatorPrey-v0:
     prey_D_0: 0.1
     energy_per_step: -0.5
     energy_per_capture: 10.0 
-    num_preys: 200
+    num_preys: 120
     target_capture_ratio: 1.0
     put_back: True
     is_reward_home: False
   default_16:
-    arena_radius: 50.0 
+    arena_radius: 40.0 
     visibility_radius: 10.0 
     critical_distance: 1.0
     predator_speed: 0.5

@@ -9,8 +9,8 @@ import yaml
 
 
 env_id = 'PredatorPrey-v0'
-config_id = 'default_8'
-name_prefix = '_default_14_test'
+config_id = 'default_14'
+name_prefix = 'v0'
 
 # 读取配置文件
 with open('./params/env_configs.yaml', 'r') as file:
