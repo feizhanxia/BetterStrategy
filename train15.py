@@ -10,7 +10,7 @@ import yaml
 
 env_id = 'PredatorPrey-v0'
 config_id = 'default_15'
-name_prefix = 'no_put_back_v0'
+name_prefix = '_default_15_v0'
 
 # 读取配置文件
 with open('./params/env_configs.yaml', 'r') as file:

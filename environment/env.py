@@ -97,13 +97,14 @@ class PredatorPreyEnv(gym.Env):
                         radius=self.arena_radius,
                         center=self.home_position
                         ) 
-        self.predator_position = self.home_position 
+        self.predator_position = self.home_position.copy()
         self.predator_angle = self.rng.uniform(-np.pi, np.pi)
         self.energy = 0.0
         self.reward = 0.0
         self.capture_count = 0
         self.num_steps = 0
         self.track = []
+        self.is_cap = False
         return self._get_observation(), self._get_info()
 
     def render(self):
@@ -220,7 +221,9 @@ class PredatorPreyEnv(gym.Env):
             "energy": self.energy,
             "capture_count": self.capture_count,
             "num_steps": self.num_steps,
-            "track": self.track
+            "track": self.track,
+            "is_cap": self.is_cap,
+            "predator_position": self.predator_position
         }
     
     def _cartesian_to_polar(self, cartesian_coords):
@@ -251,6 +254,8 @@ class PredatorPreyEnv(gym.Env):
         num_captured = num_preys_before - num_preys_after 
         # Update capture count
         self.capture_count += num_captured
+        # Update is_cap
+        self.is_cap = True if num_captured > 0 else False
         # Put new preys in the arena
         if num_captured > 0 and self.put_back:
             self.preys.add(num_captured)
