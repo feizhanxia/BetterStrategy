@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import sys
 import environment
-from agents.my_policies import GreedyPolicy, RandomPolicy
+from agents.my_policies import GreedyPolicy, RandomPolicy, SmarterPolicy
 from stable_baselines3.common.vec_env import SubprocVecEnv
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3 import PPO
@@ -16,12 +16,12 @@ from stable_baselines3.common.callbacks import BaseCallback
 
 # 设置环境ID和配置ID
 env_id = 'PredatorPrey-v0'
-config_id = 'put_back_0' 
+config_id = 'put_back_count_2' 
 name_prefix = 'greedy' # 'smart' or 'greedy' or 'random'
-episodes = 500
+episodes = 1000
 n_envs = 10
 save_path = 'analysis/data/nstep_ncap_{}_{}_{}.csv'.format(config_id, name_prefix, episodes)
-model_path = './output/checkpoints/default_8/put_back_v1_7040000_steps.zip'
+model_path = './output/best_model/default_12_v0_7680000_steps.zip'
 
 
 
@@ -40,6 +40,8 @@ if __name__ == '__main__':
         model = GreedyPolicy(vec_env.observation_space, vec_env.action_space)
     elif name_prefix == 'random':
         model = RandomPolicy(vec_env.observation_space, vec_env.action_space)
+    elif name_prefix == 'smarter':
+        model = SmarterPolicy(vec_env.observation_space, vec_env.action_space)
     
     # 初始化tqdm进度条
     progress_bar = tqdm(total=episodes, desc="Evaluating", ascii=True, unit_scale=True)

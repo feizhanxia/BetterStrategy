@@ -29,8 +29,10 @@ class GreedyPolicy(BasePolicy):
         # 检查位置的第0元素是否为零
         zero_condition = (closest_prey_position[:, 0] == 0.0) & (average_pos_of_preys[:, 0] == 0.0)
         
+        # 初始化为随机动作
+        action = 2 * th.rand(closest_prey_position[:, 0].shape, device=closest_prey_position.device) - 1
         # 初始化动作张量为-0.5,确保与输入同形状
-        action = th.full(closest_prey_position[:, 0].shape, -0.5, device=closest_prey_position.device)
+        # action = th.full(closest_prey_position[:, 0].shape, -0.5, device=closest_prey_position.device)
         
         # 计算非零位置的动作
         action[~zero_condition] = closest_prey_position[~zero_condition, 1] / th.tensor(np.pi, device=closest_prey_position.device)
@@ -48,4 +50,27 @@ class RandomPolicy(BasePolicy):
         # 直接从字典中取出张量
         closest_prey_position = observation['closest_prey_position']
         action = 2 * th.rand(closest_prey_position[:, 0].shape, device=closest_prey_position.device) - 1
+        return action
+
+
+class SmarterPolicy(BasePolicy):
+    def __init__(self, 
+                observation_space: spaces.Space,
+                action_space: spaces.Box):
+        super().__init__(observation_space, action_space)
+
+    def _predict(self, observation, state=None, episode_start=None, deterministic=True):
+        # 直接从字典中取出张量
+        closest_prey_position = observation['closest_prey_position']
+        average_pos_of_preys = observation['average_position_of_visible_preys']
+
+        # 检查位置的第0元素是否为零
+        zero_condition = (closest_prey_position[:, 0] == 0.0) & (average_pos_of_preys[:, 0] == 0.0)
+        
+        # 初始化动作张量为-0.5,确保与输入同形状
+        action = th.full(closest_prey_position[:, 0].shape, -0.5, device=closest_prey_position.device)
+        
+        # 计算非零位置的动作
+        action[~zero_condition] = closest_prey_position[~zero_condition, 1] / th.tensor(np.pi, device=closest_prey_position.device)
+        
         return action

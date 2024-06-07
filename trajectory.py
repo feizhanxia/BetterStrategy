@@ -1,5 +1,6 @@
 import gymnasium as gym
 from stable_baselines3 import PPO
+from agents.my_policies import GreedyPolicy, RandomPolicy, SmarterPolicy
 import numpy as np
 import pandas as pd
 import yaml
@@ -9,9 +10,9 @@ import environment
 
 # 设置环境ID和配置ID
 ENV_ID = 'PredatorPrey-v0'
-CONFIG_ID = 'put_back_0'
-NAME_PREFIX = 'smart'
-MODEL_PATH = 'output/checkpoints/default_8/put_back_v1_7040000_steps.zip'
+CONFIG_ID = 'put_back_count_3'
+NAME_PREFIX = 'greedy'
+MODEL_PATH = './output/best_model/default_12_v0_7680000_steps.zip'
 NUM_TRAJECTORIES = 5000
 OUTPUT_FILENAME = f'analysis/data/trajectories_{CONFIG_ID}_{NAME_PREFIX}_{NUM_TRAJECTORIES}.csv'
 
@@ -44,8 +45,16 @@ def simulate_trajectory(index, env, model):
 
 # define a function to simulate num_episodes trajectories
 def simulate_trajectories(start_index, num_episodes, position=0):
-    model = PPO.load(MODEL_PATH)
     env = gym.make(ENV_ID, **env_config)
+    # 加载模型
+    if NAME_PREFIX == 'smart':
+        model = PPO.load(MODEL_PATH)
+    elif NAME_PREFIX == 'greedy':
+        model = GreedyPolicy(env.observation_space, env.action_space)
+    elif NAME_PREFIX == 'random':
+        model = RandomPolicy(env.observation_space, env.action_space)
+    elif NAME_PREFIX == 'smarter':
+        model = SmarterPolicy(env.observation_space, env.action_space)
     trajectories = []
     for i in tqdm(range(start_index, start_index + num_episodes), 
                     desc=f"Core {position}", 

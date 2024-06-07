@@ -7,12 +7,12 @@ import cv2
 
 # 设置环境ID和配置ID
 env_id = 'PredatorPrey-v0'
-config_id = 'default_14'
+config_id = 'put_back_count_2'
 name_prefix = 'predator_prey'
-model_path = 'output/checkpoints/default_8/put_back_v1_7040000_steps.zip'
+model_path = "output/best_model/default_12_v0_7680000_steps.zip"
 
 # 'record' or 'watch' mode
-mode = 'watch' 
+mode = 'record' 
 
 
 # 读取配置文件
@@ -40,18 +40,20 @@ elif mode == 'watch':
 model = PPO.load(model_path)
 
 # 打印神经网络结构
-# print('神经网络结构:')
-# print(model.policy)
+print('神经网络结构:')
+print(model.policy)
 
 # 初始化环境并运行
 obs, info = env.reset()
 done = False
+last_frame = None
 while not done:
     if mode == 'record':
         # 保存视频,'rgb_array'模式
         frame = env.render()  # 获取当前环境的图像帧
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)  # type: ignore # 将RGB转换为BGR,适用于OpenCV
         out.write(frame)  # 写入帧到视频文件中
+        last_frame = frame  # 保存当前帧作为最后一帧
     elif mode == 'watch':
         # 渲染环境的当前状态,'human'模式
         env.render()
@@ -63,4 +65,7 @@ track = info['track']
 
 if mode == 'record':
     print("视频保存完毕!")
-
+    if last_frame is not None:
+        image_path = 'output/images/last_frame_{}_{}.png'.format(name_prefix, config_id)
+        cv2.imwrite(image_path, last_frame)
+        print(f"最后一帧图像已保存为 {image_path}")

@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import sys
 import environment
-from agents.my_policies import GreedyPolicy, RandomPolicy
+from agents.my_policies import GreedyPolicy, RandomPolicy, SmarterPolicy
 from stable_baselines3.common.vec_env import SubprocVecEnv
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3 import PPO
@@ -16,12 +16,12 @@ from stable_baselines3.common.callbacks import BaseCallback
 
 # 设置环境ID和配置ID
 env_id = 'PredatorPrey-v0'
-config_id = 'put_back_0'
-name_prefix = 'smart' # 'smart' or 'greedy' or 'random'
+config_id = 'random_putback_count_2'
+name_prefix = 'random' # 'smart' or 'greedy' or 'random'
 episodes = 500
 n_envs = 10
 save_path = 'analysis/data/ave_steps_{}_{}_{}.csv'.format(config_id, name_prefix, episodes)
-model_path = './output/checkpoints/default_8/put_back_v1_7040000_steps.zip'
+model_path = './output/best_model/default_12_v0_7680000_steps.zip'
 num_preys_list = list(range(10, 125, 5))
 
 
@@ -34,9 +34,14 @@ if __name__ == '__main__':
     if name_prefix == 'smart':
         model = PPO.load(model_path)
     elif name_prefix == 'greedy':
+        vec_env = make_vec_env(env_id, n_envs=n_envs, vec_env_cls=SubprocVecEnv, env_kwargs=env_config)
         model = GreedyPolicy(vec_env.observation_space, vec_env.action_space)
     elif name_prefix == 'random':
+        vec_env = make_vec_env(env_id, n_envs=n_envs, vec_env_cls=SubprocVecEnv, env_kwargs=env_config)
         model = RandomPolicy(vec_env.observation_space, vec_env.action_space)
+    elif name_prefix == 'smarter':
+        vec_env = make_vec_env(env_id, n_envs=n_envs, vec_env_cls=SubprocVecEnv, env_kwargs=env_config)
+        model = SmarterPolicy(vec_env.observation_space, vec_env.action_space)
     
     data = []
     for num_preys in num_preys_list:

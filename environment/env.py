@@ -118,30 +118,33 @@ class PredatorPreyEnv(gym.Env):
         else:
             if self.screen is None or self.clock is None:
                 self._initialize_renderer()
-            self.screen.fill((255, 255, 255))  # 填充背景为白色
+            self.screen.fill('white')  # 填充背景为白色
             # 绘制活动区域
-            pygame.draw.circle(self.screen, (1, 158, 213), 
+            pygame.draw.circle(self.screen, 'gray20', 
+                            self._pos_to_int(self.home_position),
+                            self.arena_radius*self.scale+6)
+            pygame.draw.circle(self.screen, 'teal', 
                             self._pos_to_int(self.home_position),
                             self.arena_radius*self.scale+6, 2)
-            # 绘制家
-            pygame.draw.circle(self.screen, (244, 222, 41), 
-                            self._pos_to_int(self.home_position), 
-                            self.critical_distance*self.scale)
-            # 绘制捕食者
-            pygame.draw.circle(self.screen, (244, 13, 100), 
-                            self._pos_to_int(self.predator_position), 
-                            self.critical_distance*self.scale)
-            pygame.draw.circle(self.screen, (175, 18, 88), 
-                            self._pos_to_int(self.predator_position), 
-                            self.visibility_radius*self.scale, 1)
-            # 绘制猎物
-            for prey in self.preys.positions:
-                pygame.draw.circle(self.screen, (179, 197, 135), 
-                                self._pos_to_int(prey), 5)
             # 绘制轨迹
             if len(self.track) > 1:
-                pygame.draw.lines(self.screen, (0, 0, 0), False, 
+                pygame.draw.lines(self.screen, 'goldenrod', False, 
                                 [self._pos_to_int(p) for p in self.track], 2)
+            # 绘制家
+            pygame.draw.circle(self.screen, 'steelblue', 
+                            self._pos_to_int(self.home_position), 
+                            self.critical_distance*self.scale)
+            # 绘制猎物
+            for prey in self.preys.positions:
+                pygame.draw.circle(self.screen, 'cadetblue', 
+                                self._pos_to_int(prey), 5)
+            # 绘制捕食者
+            pygame.draw.circle(self.screen, 'mediumvioletred', 
+                            self._pos_to_int(self.predator_position), 
+                            self.critical_distance*self.scale)
+            pygame.draw.circle(self.screen, 'lightcoral', 
+                            self._pos_to_int(self.predator_position), 
+                            self.visibility_radius*self.scale, 1)
         if mode == 'human':
             pygame.display.flip()  # 更新整个待显示的 Surface 对象到屏幕上
             self.clock.tick(12)  # 限制帧率为60fps
